@@ -1,23 +1,61 @@
-## Perguntas
+# Atividade Prática — Perceptron com Extensões
 
-1. # Conceito:
-# Explique, com suas palavras, o que é um Perceptron e qual a sua importância histórica para o desenvolvimento da Inteligência Artificial
->O Perceptron foi desenvolvido por Frank Rosenblatt em 1958 e é considerado o primeiro modelo formal de rede neural artificial. Inspirado no funcionamento de um neurônio biológico, o Perceptron é um algoritmo capaz de realizar classificações lineares a partir de entradas numéricas, que são ponderadas por pesos e processadas por uma função de ativação para gerar uma
+## Resumo
 
-2. # Funcionamento:
-# O Perceptron é considerado um classificador linear. O que isso significa? Quais são as limitações desse tipo de modelo?
->O Perceptron é chamado de classificador linear porque ele separa dados em classes utilizando uma linha (no caso 2D), um plano (3D) ou um hiperplano (mais dimensões) no espaço de características. Ou seja, ele aprende pesos para cada entrada e faz uma combinação linear dessas entradas; depois, aplica uma função de ativação para decidir a classe.
->Limitações: Só funciona para problemas linearmente separáveis, não aprende funções não lineares complexas, como XOR,saída binária, sem medir probabilidades.
+Esta atividade tem por objetivo implementar e executar exemplos de Perceptron em Python para portas lógicas AND e OR, analisar seu funcionamento, adicionar extensões como um terceiro peso e alterar a função de ativação para step, e versionar o código em um repositório GitHub/GitLab.
 
-3. # Código:
-# Ao analisar o código que você executou, quais foram as etapas principais do processo de treinamento do Perceptron?
->Inicialização: Define pesos e viés iniciais.
->Cálculo da saída: Soma ponderada das entradas + viés e aplicação da função de ativação.
->Cálculo do erro: Diferença entre saída desejada e saída prevista.
->Atualização: Ajusta pesos e viés com base no erro e taxa de aprendizado.
->Repetição: Itera sobre todas as entradas várias vezes até convergir.
+## Objetivo
 
-4. # Aplicação prática:
-# Dê um exemplo real em que o uso de um modelo simples como o Perceptron poderia ser útil.Justifique sua escolha.
->Um exemplo real seria filtrar e-mails como “spam” ou “não spam” com base em poucas características simples, como a presença de certas palavras-chave.
->Justificativa:O problema é binário (spam ou não), então o Perceptron consegue separar as duas classes.Com poucas variáveis relevantes, um modelo simples já pode ter desempenho aceitável sem a complexidadede redes neurais maiores.É rápido de treinar e fácil de interpretar, ideal para situações simples de classificação linear.
+Compreender, de forma aplicada, o funcionamento do Perceptron — um dos modelos mais simples de redes neurais artificiais — por meio da execução, análise e extensão do código em Python, incluindo modificações na função de ativação e adição de pesos.
+
+## 1) Conceito
+
+O Perceptron é um modelo de neurônio artificial. Ele recebe inputs, pesos e bias, calcula uma soma ponderada (inputs·peso + bias) e aplica uma função de ativação (sigmoid ou step), produzindo uma saída binária (0 ou 1). O perceptron foi importante por mostrar que máquinas podem aprender a classificar padrões de acordo com exemplos.
+
+## 2) Funcionamento — classificador linear e limitações
+
+- Classificador linear: o perceptron separa as classes. A decisão é baseada em uma combinação linear das entradas.
+- Limitações: Um perceptron só resolve problemas linearmente separáveis, como AND ou OR. A função de ativação step é simples, mas não diferenciável, enquanto sigmoid facilita otimizações.
+
+## 3) Código — etapas principais do treinamento
+
+1. Inicializar pesos e bias (valores aleatórios entre -1 e 1).
+2. Para cada epoch (até 100):
+   - Para cada exemplo: calcular a saída usando soma ponderada e função de ativação.
+   - Calcular o erro: erro = esperado - previsto.
+   - Atualizar os pesos: `w_i += taxa_aprendizado * erro * x_i`.
+   - Atualizar o bias: bias += taxa_aprendizado * erro.
+3. Parar ao atingir número máximo de epochs.
+
+## 4) Extensões Implementadas
+
+- **Adição de terceiro peso:** Implementado em `perceptron2.py` para aceitar 3 entradas, treinando em portas lógicas com 3 bits.
+- **Alteração da função de ativação:** Mudança de sigmoid para step implementada em `perceptron2.py`.
+
+## 5) Aplicação real
+
+Sistema para classificação binária em problemas como detecção de padrões em dados de sensores, onde múltiplas entradas influenciam uma decisão binária.
+
+## Descrição do repositório
+
+Este repositório contém implementações de perceptron em Python para portas AND e OR, com variações. O código demonstra a classe Perceptron, métodos de treinamento e predição.
+
+### Arquivos principais
+
+- `perceptron2.py` — implementação com 3 pesos, função step, para portas AND e OR com 3 entradas.
+
+
+### Mudar as epochs faz diferença?
+
+Sim. Mais epochs significam mais atualizações dos pesos e, em geral, maior convergência. Por exemplo, com `10` epochs os pesos podem não ter convergido; com `500` epochs geralmente haverá muito mais estabilidade nas atualizações (dependendo do problema).
+
+Observações rápidas:
+
+- Taxa de aprendizado: uma `learning rate` alta pode causar oscilações mesmo com muitas epochs; uma taxa muito baixa torna a convergência lenta.
+- Overfitting (ajuste excessivo): o modelo passa a memorizar ruído ou erros nos dados (dados ruidosos/inconsistentes), reduzindo sua capacidade de generalizar para novos exemplos.
+
+### Diferença entre Step/Sigmoid
+
+- **Step (degrau):** retorna 1 se a soma ponderada >= 0, caso contrário 0. É simples e rápida, indicada para classificadores binários básicos, mas não é diferenciável, o que impede o uso de métodos de otimização baseados em gradiente.
+
+- **Sigmoid:** função contínua que mapeia a soma ponderada para (0, 1) pela fórmula `1/(1+e^{-x})`. É diferenciável, permitindo treinamento por gradiente e atualizações mais suaves dos pesos, mas pode saturar para valores extremos e é ligeiramente mais custosa computacionalmente.
